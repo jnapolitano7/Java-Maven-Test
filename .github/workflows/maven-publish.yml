@@ -26,6 +26,8 @@ jobs:
 
     - name: Build with Maven
       run: mvn -B package --file pom.xml -DskipTests
+      env:
+        GITHUB_TOKEN: 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
 
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
