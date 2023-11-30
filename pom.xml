@@ -141,7 +141,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>edu.gatech.gtri.obm.translator.alloy.userinterface.UserInterface</mainClass>
+              <mainClass>edu.gatech.gtri.obmTest.Main</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
