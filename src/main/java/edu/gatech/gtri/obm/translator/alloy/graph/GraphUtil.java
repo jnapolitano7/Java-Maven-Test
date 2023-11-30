@@ -6,7 +6,6 @@ import org.graphstream.graph.Node;
 
 public class GraphUtil {
 
-
   public static long idCounter = 0;
 
   public static Node simplesequence(Graph graph) {
@@ -117,10 +116,8 @@ public class GraphUtil {
     p2p3.setAttribute("oneof", true);
     p2p2.setAttribute("oneof", true);
 
-
     return p1Node;
   }
-
 
   public static Node ex1(Graph graph) {
     Node p0Node = createNode(graph, "p0");
@@ -158,7 +155,6 @@ public class GraphUtil {
     p22pf.setAttribute("oneof", true);
     p21endp2f.setAttribute("oneof", true);
 
-
     String p231 = createNode(graph, "p231").getId();
     String p232 = createNode(graph, "p232").getId();
     String p233 = createNode(graph, "p233").getId();
@@ -174,8 +170,6 @@ public class GraphUtil {
     p231pf.setAttribute("oneof", true);
     p232pf.setAttribute("oneof", true);
     p233pf.setAttribute("oneof", true);
-
-
 
     String p3start = createNode(graph, "p3start").getId();
     Edge p0p3start = graph.addEdge("p0p3start", p0, p3start, true);
@@ -212,7 +206,6 @@ public class GraphUtil {
     p332pf.setAttribute("oneof", true);
     p333pf.setAttribute("oneof", true);
     return pfNode;
-
   }
 
   public static Node createNode(Graph graph, String name) {
@@ -234,5 +227,4 @@ public class GraphUtil {
   public static synchronized String createID() {
     return String.valueOf(idCounter++);
   }
-
 }

@@ -15,7 +15,6 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
-
 public class Graph2AlloyExpr {
 
   Graph graph;
@@ -28,7 +27,6 @@ public class Graph2AlloyExpr {
     graph.setAttribute("ui.stylesheet", styleSheet);
     return graph;
   }
-
 
   public static void main(String[] args) {
 
@@ -53,18 +51,14 @@ public class Graph2AlloyExpr {
     Map<IObject, IObject> hbinv = ga.getHappensBeforeInvFunction();
     System.out.println(hbinv);
     print(hbinv);
-
-
   }
 
   public Graph2AlloyExpr() {
     this.graph = createGraph();
   }
 
-
   public Graph getGraph() {
-    if (this.graph == null)
-      this.graph = createGraph();
+    if (this.graph == null) this.graph = createGraph();
     return this.graph;
   }
 
@@ -73,8 +67,11 @@ public class Graph2AlloyExpr {
   }
 
   public Edge addEdge(String _name, String _sourceName, String _targetName) {
-    return graph.addEdge(_name, Graph2AlloyExpr.getNodeByName(graph, _sourceName),
-        Graph2AlloyExpr.getNodeByName(graph, _targetName), true);
+    return graph.addEdge(
+        _name,
+        Graph2AlloyExpr.getNodeByName(graph, _sourceName),
+        Graph2AlloyExpr.getNodeByName(graph, _targetName),
+        true);
   }
 
   public void display() {
@@ -107,8 +104,6 @@ public class Graph2AlloyExpr {
     return fn;
   }
 
-
-
   public void functionHBFn(Map<IObject, IObject> hb, IObject source, Set<Node> _visited) {
 
     if (source instanceof ONode) {
@@ -125,24 +120,32 @@ public class Graph2AlloyExpr {
           OListOR sourceOR = new OListOR();
 
           Node targetNode = sourceNode.getLeavingEdge(0).getTargetNode();
-          targetNode.enteringEdges().forEach(edge -> {
-            // TODO validate: all edges should be one of and all sourceNodes should have one leaving
-            // edge.
-            Node sourceNodeOrOtherSourceNode = edge.getSourceNode();
-            if (sourceNodeOrOtherSourceNode != targetNode) { // change p1-> p1+p2 to p1->p2 for
-                                                             // self-loop
-              _visited.add(sourceNodeOrOtherSourceNode); // sourceNode is added twice but ok
-              sourceOR.add(new ONode(sourceNodeOrOtherSourceNode));
-            }
-          });
+          targetNode
+              .enteringEdges()
+              .forEach(
+                  edge -> {
+                    // TODO validate: all edges should be one of and all sourceNodes should have one
+                    // leaving
+                    // edge.
+                    Node sourceNodeOrOtherSourceNode = edge.getSourceNode();
+                    if (sourceNodeOrOtherSourceNode
+                        != targetNode) { // change p1-> p1+p2 to p1->p2 for
+                      // self-loop
+                      _visited.add(sourceNodeOrOtherSourceNode); // sourceNode is added twice but ok
+                      sourceOR.add(new ONode(sourceNodeOrOtherSourceNode));
+                    }
+                  });
           hb.put(sourceOR, new ONode(targetNode));
         } else { // decision- sourceNode.leavingEdges().count() > 1 source -> target1 and source ->
-                 // target2
+          // target2
           OListOR targetOR = new OListOR();
-          sourceNode.leavingEdges().forEach(edge -> {
-            Node targetNode = edge.getTargetNode();
-            targetOR.add(new ONode(targetNode));
-          });
+          sourceNode
+              .leavingEdges()
+              .forEach(
+                  edge -> {
+                    Node targetNode = edge.getTargetNode();
+                    targetOR.add(new ONode(targetNode));
+                  });
           hb.put(source, targetOR);
         }
 
@@ -153,16 +156,18 @@ public class Graph2AlloyExpr {
         } // merge
         else if (sourceNode.leavingEdges().count() > 1) {
           OListAND targetAND = new OListAND();
-          sourceNode.leavingEdges().forEach(edge -> {
-            Node targetNode = edge.getTargetNode();
-            // all targetNode should be not one-of
-            targetAND.add(new ONode(targetNode));
-          });
+          sourceNode
+              .leavingEdges()
+              .forEach(
+                  edge -> {
+                    Node targetNode = edge.getTargetNode();
+                    // all targetNode should be not one-of
+                    targetAND.add(new ONode(targetNode));
+                  });
           hb.put(source, targetAND);
         }
       }
     } // not ONode
-
   }
 
   public static void functionHBInvFn(Map<IObject, IObject> hb, IObject inode, Set<Node> _visited) {
@@ -170,7 +175,6 @@ public class Graph2AlloyExpr {
     if (inode instanceof ONode) {
       Node targetNode = ((ONode) inode).getNode();
       _visited.add(targetNode);
-
 
       Optional<Edge> oneofEdges = targetNode.enteringEdges().filter(e -> isOneOf(e)).findAny();
       if (oneofEdges.isPresent()) {
@@ -182,24 +186,32 @@ public class Graph2AlloyExpr {
           // the target and other targets connected from the target's source
           // TODO: validate other edges from the sourceNode should be one-of and the other
           // targetNods should have one one-of entering edges
-          sourceNode.leavingEdges().forEach(edge -> {
-            Node otherTargetNodesFromTheSource = edge.getTargetNode(); // this include the
-                                                                       // targetNode
-            if (otherTargetNodesFromTheSource != sourceNode) { // change p2 -> p2+p3 to p2-> p3 for
-                                                               // self-loop
-              _visited.add(otherTargetNodesFromTheSource); // the targetNode in argument is added
-                                                           // twice but ok
-              targetOR.add(new ONode(otherTargetNodesFromTheSource));
-            }
-          });
+          sourceNode
+              .leavingEdges()
+              .forEach(
+                  edge -> {
+                    Node otherTargetNodesFromTheSource = edge.getTargetNode(); // this include the
+                    // targetNode
+                    if (otherTargetNodesFromTheSource
+                        != sourceNode) { // change p2 -> p2+p3 to p2-> p3 for
+                      // self-loop
+                      _visited.add(
+                          otherTargetNodesFromTheSource); // the targetNode in argument is added
+                      // twice but ok
+                      targetOR.add(new ONode(otherTargetNodesFromTheSource));
+                    }
+                  });
           hb.put(new ONode(sourceNode), targetOR);
         } else { // must be > 1 since at least one found as one-of
           OListOR sourceOR = new OListOR();
           // merge =
-          targetNode.enteringEdges().forEach(edge -> {
-            Node sourceNode = edge.getSourceNode();
-            sourceOR.add(new ONode(sourceNode));
-          });
+          targetNode
+              .enteringEdges()
+              .forEach(
+                  edge -> {
+                    Node sourceNode = edge.getSourceNode();
+                    sourceOR.add(new ONode(sourceNode));
+                  });
           hb.put(sourceOR, new ONode(targetNode));
         }
       } else { // not one of
@@ -210,48 +222,44 @@ public class Graph2AlloyExpr {
         // join
         else if (targetNodeEnteringCount > 1) {
           OListAND andSource = new OListAND();
-          targetNode.enteringEdges().forEach(edge -> {
-            andSource.add(new ONode(edge.getSourceNode()));
-          });
+          targetNode
+              .enteringEdges()
+              .forEach(
+                  edge -> {
+                    andSource.add(new ONode(edge.getSourceNode()));
+                  });
           hb.put(andSource, new ONode(targetNode));
         }
-
       }
     }
   }
-
-
 
   public static int getOutDegreeMinusSelfLoop(Node node) {
     int numOfSelfLoop = 0;
     Iterator<Edge> iter = node.leavingEdges().iterator();
     while (iter.hasNext()) {
-      if (iter.next().getTargetNode() == node)
-        numOfSelfLoop++;
+      if (iter.next().getTargetNode() == node) numOfSelfLoop++;
     }
     return node.getOutDegree() - numOfSelfLoop;
   }
 
-
   /**
    * {p1=p3, p0=[p1, p2], p2=p3}
-   * 
+   *
    * @param _map
    * @return 0: p1, p3 1: p0, p1 2: p0, p2 3: p2, p3
-   * 
    */
   public static List<String> getFnString(Map<IObject, IObject> _map) {
 
     List<String> hbFunctionFilter = new ArrayList<>();
     for (IObject key : _map.keySet()) {
-      for (String keyString : key.toStringAlloy()) {// p1, p0, p2
+      for (String keyString : key.toStringAlloy()) { // p1, p0, p2
         for (String value : _map.get(key).toStringAlloy()) { // p1, (p1, p2), p3
           hbFunctionFilter.add(keyString + ", " + value);
         }
       }
     }
     return hbFunctionFilter;
-
   }
 
   public static void print(Map<IObject, IObject> _map) {
@@ -261,7 +269,6 @@ public class Graph2AlloyExpr {
       System.out.println(i + ": " + hbFunctionFilter.get(i));
     }
   }
-
 
   public static Map<IObject, IObject> happensBefore(ONode source, boolean leavingEdgeOneOf) {
     Map<IObject, IObject> hb = new HashMap<>();
@@ -298,16 +305,13 @@ public class Graph2AlloyExpr {
           }
         }
       }
-
     }
     return hb;
-
   }
 
   public static IObject get(Node target, boolean oneof) {
     ONode node = new ONode(target, oneof);
     System.out.println("get: " + target.getAttribute(ONode.node_attribute_name));
-
 
     if (target.leavingEdges().count() == 1) {
       Edge edge = target.leavingEdges().iterator().next();
@@ -317,15 +321,14 @@ public class Graph2AlloyExpr {
           int numOfOneOf = node.minusOneOf();
           if (numOfOneOf == 0) {
             return new ONode(target, oneof);
-          } else
-            return new ONode(target, oneof);
+          } else return new ONode(target, oneof);
         } else { // join
           return new ONode(target, oneof);
         }
       }
     } else if (target.leavingEdges().count() > 1) {
       OListAND listAnd = new OListAND();
-      for (Iterator<Edge> iter = target.leavingEdges().iterator(); iter.hasNext();) {
+      for (Iterator<Edge> iter = target.leavingEdges().iterator(); iter.hasNext(); ) {
         Edge edge = iter.next();
         Node newTarget = edge.getTargetNode();
         // listAnd.add(get(newTarget, oneof));
@@ -342,31 +345,33 @@ public class Graph2AlloyExpr {
   }
 
   public static boolean isOneOf(Edge edge) {
-    if (edge.getAttribute("oneof") == null)
-      return false;
+    if (edge.getAttribute("oneof") == null) return false;
     return (Boolean) edge.getAttribute("oneof");
   }
 
   public static Node getNodeByName(Graph graph, String _nodeName) {
     for (Node node : graph) {
-      if (node.getAttribute(ONode.node_attribute_name).equals(_nodeName))
-        return node;
+      if (node.getAttribute(ONode.node_attribute_name).equals(_nodeName)) return node;
     }
     return null;
   }
 
-
   protected static String styleSheet =
-      "node {" + "   fill-color: black; text-color: black; text-alignment:above; text-size:20;"
-          + "}" + "node.marked {" + "   fill-color: red;" + "} edge { fill-color: black;} ";
+      "node {"
+          + "   fill-color: black; text-color: black; text-alignment:above; text-size:20;"
+          + "}"
+          + "node.marked {"
+          + "   fill-color: red;"
+          + "} edge { fill-color: black;} ";
 
   public static void display(Graph graph) {
     graph.setAttribute("ui.stylesheet", styleSheet);
     for (Node node : graph)
       node.setAttribute("ui.label", node.getAttribute(ONode.node_attribute_name));
     for (int i = 0; i < graph.getEdgeCount(); i++)
-      graph.getEdge(i).setAttribute("ui.label",
-          graph.getEdge(i).getAttribute("oneof") != null ? "oneof" : "");
+      graph
+          .getEdge(i)
+          .setAttribute("ui.label", graph.getEdge(i).getAttribute("oneof") != null ? "oneof" : "");
     graph.display();
   }
 
@@ -423,5 +428,4 @@ public class Graph2AlloyExpr {
     } catch (Exception e) {
     }
   }
-
 }

@@ -11,7 +11,7 @@ public class MDUtils {
   /**
    * Get class in hierarchy order in list but not include "BehaviorOccurence" or "Occurrence".
    * Smaller the index, more ancestor
-   * 
+   *
    * @param mainClass
    * @return
    */
@@ -30,14 +30,16 @@ public class MDUtils {
       if (parents.size() != 1) {
         // Only one parent is allowed in Alloy
         String parentName = parents.get(0).getName();
-        System.err.println("Only one parent is allowed. One parent \"" + parentName
-            + "\" is included as sig \"" + aClass.getName() + "\"'s parent");
+        System.err.println(
+            "Only one parent is allowed. One parent \""
+                + parentName
+                + "\" is included as sig \""
+                + aClass.getName()
+                + "\"'s parent");
       }
       // parentName == null , "BehaviorOccurrence", "Occurrence" or "Anything"
-      if (!AlloyUtils.validParent(((Class) parents.get(0)).getName()))
-        return null;
+      if (!AlloyUtils.validParent(((Class) parents.get(0)).getName())) return null;
       return (Class) parents.get(0);
-    } else
-      return null;
+    } else return null;
   }
 }

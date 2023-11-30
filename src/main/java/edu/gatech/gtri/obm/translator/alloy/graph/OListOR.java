@@ -19,10 +19,8 @@ public class OListOR extends OListANDOR {
     for (IObject io : list) {
       s += "+" + io;
     }
-    if (s.startsWith("+"))
-      s = s.substring(s.indexOf("+") + 1);
+    if (s.startsWith("+")) s = s.substring(s.indexOf("+") + 1);
     ls.add(s);
     return ls;
   }
-
 }

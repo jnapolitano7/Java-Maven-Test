@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.graphstream.graph.Node;
 
-
-
 public class ONode implements IObject {
 
   public static String node_attribute_name = "name";
@@ -17,7 +15,6 @@ public class ONode implements IObject {
   public ONode(Node _n, boolean oneof) {
     this.n = _n;
     numOneOf++;
-
   }
 
   public int getNumOneOf() {
@@ -65,5 +62,4 @@ public class ONode implements IObject {
   public void sort() {
     return;
   }
-
 }

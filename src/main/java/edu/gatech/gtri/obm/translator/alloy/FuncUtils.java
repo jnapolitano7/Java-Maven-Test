@@ -1,13 +1,13 @@
 package edu.gatech.gtri.obm.translator.alloy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import edu.mit.csail.sdg.ast.Expr;
 import edu.mit.csail.sdg.ast.ExprConstant;
 import edu.mit.csail.sdg.ast.Func;
 import edu.mit.csail.sdg.ast.Module;
 import edu.mit.csail.sdg.ast.Sig;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FuncUtils {
 
@@ -54,8 +54,8 @@ public class FuncUtils {
     return expr.cardinality().gt(ExprConstant.makeNUMBER(num));
   }
 
-  public static Expr addBijectionFilteredExprHappensBefore(Module transferModule, Expr first,
-      Expr second) {
+  public static Expr addBijectionFilteredExprHappensBefore(
+      Module transferModule, Expr first, Expr second) {
     Func happensBefore = AlloyUtils.getFunction(transferModule, "o/happensBefore");
     Func bijectionFiltered = AlloyUtils.getFunction(transferModule, "o/bijectionFiltered");
 
@@ -64,8 +64,8 @@ public class FuncUtils {
     return bijectionFilteredExpr;
   }
 
-  public static Expr addFunctionFilteredExprHappensBefore(Module transferModule, Expr first,
-      Expr second) {
+  public static Expr addFunctionFilteredExprHappensBefore(
+      Module transferModule, Expr first, Expr second) {
     Func happensBefore = AlloyUtils.getFunction(transferModule, "o/happensBefore");
     Func fn = AlloyUtils.getFunction(transferModule, "o/functionFiltered");
 
@@ -74,8 +74,8 @@ public class FuncUtils {
     return expr;
   }
 
-  public static Expr addInverseFunctionFilteredExprHappensBefore(Module transferModule, Expr first,
-      Expr second) {
+  public static Expr addInverseFunctionFilteredExprHappensBefore(
+      Module transferModule, Expr first, Expr second) {
     Func happensBefore = AlloyUtils.getFunction(transferModule, "o/happensBefore");
     Func fn = AlloyUtils.getFunction(transferModule, "o/inverseFunctionFiltered");
 
@@ -107,7 +107,6 @@ public class FuncUtils {
     return nonZeroDurationOnlyFuncExpr;
   }
 
-
   public static Expr addSuppressTransfersExpr(Module transferModule) {
     Sig transfer = AlloyUtils.getReachableSig(transferModule, "o/Transfer");
     Expr suppressTransfersExprBody = transfer.no();
@@ -134,9 +133,9 @@ public class FuncUtils {
     return expr;
   }
 
-
   public static Expr addStep(Module transferModule, List<Sig.Field> fields, Sig sig) {
-    return FuncUtils.addToExpr(FuncUtils.addStepsInFields(transferModule, fields, sig),
+    return FuncUtils.addToExpr(
+        FuncUtils.addStepsInFields(transferModule, fields, sig),
         FuncUtils.addFieldsInStep(transferModule, fields, sig));
   }
 
@@ -164,9 +163,8 @@ public class FuncUtils {
     return e;
   }
 
-  public static Expr createConstraintExpr(Module transferModule, Sig mainSig,
-      List<Sig.Field> fields, List<Sig> attTypeSigs) {
-
+  public static Expr createConstraintExpr(
+      Module transferModule, Sig mainSig, List<Sig.Field> fields, List<Sig> attTypeSigs) {
 
     // pred nonZeroDurationOnly{all occ: Occurrence | not o/isZeroDuration[occ]}
     Expr nonZeroDurationOnlyFuncExpr = FuncUtils.addNonZeroDurationOnly(transferModule);
@@ -177,8 +175,9 @@ public class FuncUtils {
 
     List<Expr> lduring = new ArrayList<>();
     for (int i = 0; i < fields.size(); i++) {
-      lduring.add(FuncUtils.getDuringExampleExpr(fields.get(i) + "DuringExample", mainSig,
-          fields.get(i), attTypeSigs.get(i)));
+      lduring.add(
+          FuncUtils.getDuringExampleExpr(
+              fields.get(i) + "DuringExample", mainSig, fields.get(i), attTypeSigs.get(i)));
     }
     // pred p1DuringExample {P1 in (Join.p1)}
     Expr instancesDuringExampleExpr =
@@ -187,22 +186,28 @@ public class FuncUtils {
     // pred onlyJoin {#Join = 1}
     Expr onlySigExpr = FuncUtils.onlyOneSigExpr("onlySig", mainSig);
 
-
-    return FuncUtils.addExprs(Arrays.asList(nonZeroDurationOnlyFuncExpr, suppressTransfersExpr,
-        suppressIOExpr, instancesDuringExampleExpr, onlySigExpr));
+    return FuncUtils.addExprs(
+        Arrays.asList(
+            nonZeroDurationOnlyFuncExpr,
+            suppressTransfersExpr,
+            suppressIOExpr,
+            instancesDuringExampleExpr,
+            onlySigExpr));
   }
 
-  public static Expr forkHappensBefore(Module _transferModule, Sig _mainSig, Sig.Field _p1,
-      Sig.Field _p2, Sig.Field _p3) {
-    Expr e1 = FuncUtils.addBijectionFilteredExprHappensBefore(_transferModule, _mainSig.join(_p1),
-        _mainSig.join(_p2));
-    Expr e2 = FuncUtils.addBijectionFilteredExprHappensBefore(_transferModule, _mainSig.join(_p1),
-        _mainSig.join(_p3));
+  public static Expr forkHappensBefore(
+      Module _transferModule, Sig _mainSig, Sig.Field _p1, Sig.Field _p2, Sig.Field _p3) {
+    Expr e1 =
+        FuncUtils.addBijectionFilteredExprHappensBefore(
+            _transferModule, _mainSig.join(_p1), _mainSig.join(_p2));
+    Expr e2 =
+        FuncUtils.addBijectionFilteredExprHappensBefore(
+            _transferModule, _mainSig.join(_p1), _mainSig.join(_p3));
     return FuncUtils.addExprs(Arrays.asList(e1, e2));
   }
 
-  public static Expr decisionHappensBefore(Module _transferModule, Sig _mainSig, Sig.Field _p1,
-      Sig.Field _p2, Sig.Field... _p3s) {
+  public static Expr decisionHappensBefore(
+      Module _transferModule, Sig _mainSig, Sig.Field _p1, Sig.Field _p2, Sig.Field... _p3s) {
     Expr plus = _mainSig.join(_p2);
     for (Sig.Field p3 : _p3s) {
       plus = plus.plus(_mainSig.join(p3));
@@ -213,20 +218,22 @@ public class FuncUtils {
     return e1;
   }
 
-  public static Expr loopHappensBefore(Module _transferModule, Sig _mainSig, Sig.Field _p1,
-      Sig.Field _p2, Sig.Field _p3) {
-    Expr e1 = FuncUtils.addFunctionFilteredExprHappensBefore(_transferModule, _mainSig.join(_p1),
-        _mainSig.join(_p2));
-    Expr e2 = FuncUtils.addInverseFunctionFilteredExprHappensBefore(_transferModule,
-        _mainSig.join(_p1).plus(_mainSig.join(_p2)), _mainSig.join(_p2));
+  public static Expr loopHappensBefore(
+      Module _transferModule, Sig _mainSig, Sig.Field _p1, Sig.Field _p2, Sig.Field _p3) {
+    Expr e1 =
+        FuncUtils.addFunctionFilteredExprHappensBefore(
+            _transferModule, _mainSig.join(_p1), _mainSig.join(_p2));
+    Expr e2 =
+        FuncUtils.addInverseFunctionFilteredExprHappensBefore(
+            _transferModule, _mainSig.join(_p1).plus(_mainSig.join(_p2)), _mainSig.join(_p2));
 
-    Expr e3 = FuncUtils.addFunctionFilteredExprHappensBefore(_transferModule, _mainSig.join(_p2),
-        _mainSig.join(_p2).plus(_mainSig.join(_p3)));
-    Expr e4 = FuncUtils.addInverseFunctionFilteredExprHappensBefore(_transferModule,
-        _mainSig.join(_p2), _mainSig.join(_p3));
+    Expr e3 =
+        FuncUtils.addFunctionFilteredExprHappensBefore(
+            _transferModule, _mainSig.join(_p2), _mainSig.join(_p2).plus(_mainSig.join(_p3)));
+    Expr e4 =
+        FuncUtils.addInverseFunctionFilteredExprHappensBefore(
+            _transferModule, _mainSig.join(_p2), _mainSig.join(_p3));
 
     return FuncUtils.addExprs(Arrays.asList(e1, e2, e3, e4));
   }
-
-
 }

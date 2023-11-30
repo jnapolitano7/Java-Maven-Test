@@ -1,11 +1,11 @@
 package edu.gatech.gtri.obm.translator.alloy.tofile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import edu.mit.csail.sdg.ast.Command;
 import edu.mit.csail.sdg.ast.Expr;
 import edu.mit.csail.sdg.ast.Sig;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AlloyModule {
 

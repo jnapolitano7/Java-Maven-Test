@@ -3,8 +3,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>edu.gatech.gtri.obm</groupId>
-  <artifactId>NIST-OBM-Translator</artifactId>
+  <artifactId>Java-Maven-Test</artifactId>
   <version>1.0-SNAPSHOT</version>
+
+  <scm>
+    <developerConnection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</developerConnection>
+  </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>Java-Maven-Test</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/jnapolitano7/Java-Maven-Test</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <alloy.version>5.1.0</alloy.version>
@@ -22,14 +34,6 @@
     <junit-jupiter-engine.version>5.9.2</junit-jupiter-engine.version>
     <junit-jupiter-params.version>5.9.2</junit-jupiter-params.version>
   </properties>
-
-<distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub Packages</name>
-      <url>https://maven.pkg.github.com/octocat/hello-world</url>
-    </repository>
-  </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -128,6 +132,11 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.1</version>
+      </plugin>
+      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <archive>
@@ -205,4 +214,3 @@
   </build>
 
 </project>
-

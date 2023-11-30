@@ -1,11 +1,5 @@
 package edu.gatech.gtri.obm.translator.alloy;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Pos;
 import edu.mit.csail.sdg.ast.Command;
@@ -23,6 +17,12 @@ import edu.mit.csail.sdg.ast.Sig;
 import edu.mit.csail.sdg.ast.Sig.Field;
 import edu.mit.csail.sdg.ast.Sig.PrimSig;
 import edu.mit.csail.sdg.parser.CompUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Alloy {
 
@@ -64,11 +64,7 @@ public class Alloy {
   protected static final String templateString =
       "open Transfer[Occurrence] as o \n" + "abstract sig Occurrence{}";
 
-
-  /**
-   * 
-   * @param working_dir where required alloy library defined in templateString is locating.
-   */
+  /** @param working_dir where required alloy library defined in templateString is locating. */
   public Alloy(String working_dir) {
 
     System.setProperty(("java.io.tmpdir"), working_dir);
@@ -89,7 +85,6 @@ public class Alloy {
     for (Expr expr : exprList.args) {
       ignoredExprs.add(expr);
     }
-
 
     // abstract
     occSig = (PrimSig) AlloyUtils.getReachableSig(templateModule, "this/Occurrence");
@@ -116,7 +111,6 @@ public class Alloy {
 
     isAfterSource = AlloyUtils.getFunction(transferModule, "o/isAfterSource");
     isBeforeTarget = AlloyUtils.getFunction(transferModule, "o/isBeforeTarget");
-
 
     osteps = AlloyUtils.getFunction(transferModule, "o/steps");
     oinputs = AlloyUtils.getFunction(transferModule, "o/inputs");
@@ -165,7 +159,6 @@ public class Alloy {
     return Alloy.templateModule;
   }
 
-
   public PrimSig getOccSig() {
     return Alloy.occSig;
   }
@@ -205,16 +198,13 @@ public class Alloy {
     }
   }
 
-
   public Set<Sig> getIgnoredSigs() {
     return ignoredSigs;
   }
 
-
   public Set<Expr> getIgnoredExprs() {
     return ignoredExprs;
   }
-
 
   public Set<Func> getIgnoredFuncs() {
     return ignoredFuncs;
@@ -224,7 +214,7 @@ public class Alloy {
    * support when Expr original is ExprBinary(ie., p1 + p2) to add ExprVar s in both so returns s.p1
    * and s.p2. if original is like "BuffetService <: (FoodService <: eat)" -> ((ExprBinary)
    * original).op = "<:", in this case just return s.join(original) =
-   * 
+   *
    * @param s
    * @param original
    * @return
@@ -233,22 +223,21 @@ public class Alloy {
     if (original instanceof ExprBinary) {
       Expr left = addExprVarToExpr(s, ((ExprBinary) original).left);
       Expr right = addExprVarToExpr(s, ((ExprBinary) original).right);
-      if (((ExprBinary) original).op == ExprBinary.Op.PLUS)
-        return left.plus(right);
-      else
-        return s.join(original); // x . BuffetService <: (FoodService <: eat) where original =
-                                 // "BuffetService <: (FoodService <: eat)" with ((ExprBinary)
-                                 // original).op = "<:"
+      if (((ExprBinary) original).op == ExprBinary.Op.PLUS) return left.plus(right);
+      else return s.join(original); // x . BuffetService <: (FoodService <: eat) where original =
+      // "BuffetService <: (FoodService <: eat)" with ((ExprBinary)
+      // original).op = "<:"
     } else {
       return s.join(original); // x.BuffetService
     }
   }
 
-  public void createInverseFunctionFilteredHappensBeforeAndAddToOverallFact(Sig ownerSig, Expr from,
-      Expr to) {
+  public void createInverseFunctionFilteredHappensBeforeAndAddToOverallFact(
+      Sig ownerSig, Expr from, Expr to) {
     ExprVar s = ExprVar.make(null, "x", ownerSig.type());
-    Expr inverseFunctionFilteredExpr = inverseFunctionFiltered.call(happensBefore.call(),
-        addExprVarToExpr(s, from), addExprVarToExpr(s, to));
+    Expr inverseFunctionFilteredExpr =
+        inverseFunctionFiltered.call(
+            happensBefore.call(), addExprVarToExpr(s, from), addExprVarToExpr(s, to));
 
     List<ExprHasName> names = new ArrayList<>(List.of(s));
     Decl decl = new Decl(null, null, null, names, ownerSig.oneOf());
@@ -259,11 +248,11 @@ public class Alloy {
    * Creates a inverseFunctionFiltered fact with happensBefore. Use when "from" or "to" has a +
    * sign. fact f3 {all s: Loop | functionFiltered[happensBefore, s.p2, s.p2 + s.p3]} ownerSig=Loop;
    * from={p2}; to={p2, p3}
-   * 
-   * In this example, "to" has a + sign.
+   *
+   * <p>In this example, "to" has a + sign.
    */
-  public void createInverseFunctionFilteredHappensBeforeAndAddToOverallFact(Sig ownerSig,
-      Expr[] from, Expr[] to) {
+  public void createInverseFunctionFilteredHappensBeforeAndAddToOverallFact(
+      Sig ownerSig, Expr[] from, Expr[] to) {
 
     assert from.length > 0 : "error: from.length must be greater than 0";
     assert to.length > 0 : "error: to.length must be greater than 0";
@@ -289,35 +278,35 @@ public class Alloy {
   /**
    * Creates a functionFiltered fact. Example Alloy fact: fact f1 { all s: Loop |
    * functionFiltered[happensBefore, s.p1, s.p2] } ownerSig = Loop, from = p1, to = p2
-   * 
-   * This function doesn't handle the case where "from" or "to" has a plus sign in it. Example Alloy
-   * fact this function can't create: fact f3 {all s: Loop | functionFiltered[happensBefore, s.p2,
-   * s.p2 + s.p3]}
-   * 
-   * I wrote another function below to handle this case with + sign.
+   *
+   * <p>This function doesn't handle the case where "from" or "to" has a plus sign in it. Example
+   * Alloy fact this function can't create: fact f3 {all s: Loop | functionFiltered[happensBefore,
+   * s.p2, s.p2 + s.p3]}
+   *
+   * <p>I wrote another function below to handle this case with + sign.
    * createFunctionFilteredHappensBeforeAndAllToOverAllFact( Sig ownerSig, Expr[] from, Expr[] to)
    */
-  public void createFunctionFilteredHappensBeforeAndAddToOverallFact(Sig ownerSig, Expr from,
-      Expr to) {
+  public void createFunctionFilteredHappensBeforeAndAddToOverallFact(
+      Sig ownerSig, Expr from, Expr to) {
     ExprVar s = ExprVar.make(null, "x", ownerSig.type());
 
-    Expr funcFilteredExpr = functionFiltered.call(happensBefore.call(), addExprVarToExpr(s, from),
-        addExprVarToExpr(s, to));
+    Expr funcFilteredExpr =
+        functionFiltered.call(
+            happensBefore.call(), addExprVarToExpr(s, from), addExprVarToExpr(s, to));
     List<ExprHasName> names = new ArrayList<>(List.of(s));
     Decl decl = new Decl(null, null, null, names, ownerSig.oneOf());
     this.addToOverallFact(funcFilteredExpr.forAll(decl));
   }
 
-
   /**
    * Creates a functionFiltered fact with happensBefore. Use when "from" or "to" has a + sign. fact
    * f3 {all s: Loop | functionFiltered[happensBefore, s.p2, s.p2 + s.p3]} ownerSig=Loop; from={p2};
    * to={p2, p3}
-   * 
-   * In this example, "to" has a + sign.
+   *
+   * <p>In this example, "to" has a + sign.
    */
-  public void createFunctionFilteredHappensBeforeAndAddToOverallFact(Sig ownerSig, Expr[] from,
-      Expr[] to) {
+  public void createFunctionFilteredHappensBeforeAndAddToOverallFact(
+      Sig ownerSig, Expr[] from, Expr[] to) {
 
     assert from.length > 0 : "error: from.length must be greater than 0";
     assert to.length > 0 : "error: to.length must be greater than 0";
@@ -338,13 +327,13 @@ public class Alloy {
     addToOverallFact(funcFilteredExpr.forAll(decl));
   }
 
-  public void createBijectionFilteredHappensBeforeAndAddToOverallFact(Sig ownerSig, Expr from,
-      Expr to) {
+  public void createBijectionFilteredHappensBeforeAndAddToOverallFact(
+      Sig ownerSig, Expr from, Expr to) {
     ExprVar s = ExprVar.make(null, "x", ownerSig.type());
 
-    Expr bijectionFilteredExpr = bijectionFiltered.call(happensBefore.call(),
-        addExprVarToExpr(s, from), addExprVarToExpr(s, to));
-
+    Expr bijectionFilteredExpr =
+        bijectionFiltered.call(
+            happensBefore.call(), addExprVarToExpr(s, from), addExprVarToExpr(s, to));
 
     List<ExprHasName> names = new ArrayList<>(List.of(s));
     Decl decl = new Decl(null, null, null, names, ownerSig.oneOf());
@@ -378,20 +367,21 @@ public class Alloy {
     this.addToOverallFact(isBeforeTarget.call(s.join(transfer)).forAll(decl));
   }
 
-  public void createInverseFunctionFilteredAndAddToOverallFact(Sig ownerSig, Expr from, Expr to,
-      Func func) {
+  public void createInverseFunctionFilteredAndAddToOverallFact(
+      Sig ownerSig, Expr from, Expr to, Func func) {
     ExprVar s = ExprVar.make(null, "x", ownerSig.type());
 
-    Expr funcFilteredExpr = inverseFunctionFiltered.call(func.call(), addExprVarToExpr(s, from),
-        addExprVarToExpr(s, to));
+    Expr funcFilteredExpr =
+        inverseFunctionFiltered.call(
+            func.call(), addExprVarToExpr(s, from), addExprVarToExpr(s, to));
     List<ExprHasName> names = new ArrayList<>(List.of(s));
     Decl decl = new Decl(null, null, null, names, ownerSig.oneOf());
     this.addToOverallFact(funcFilteredExpr.forAll(decl));
   }
 
   /* if from or to is null, use ExprVar x */
-  public void createFunctionFilteredAndAddToOverallFact(Sig ownerSig, Expr from, Expr to,
-      Func func) {
+  public void createFunctionFilteredAndAddToOverallFact(
+      Sig ownerSig, Expr from, Expr to, Func func) {
     ExprVar s = ExprVar.make(null, "x", ownerSig.type());
 
     to = to == null ? s : to;
@@ -412,18 +402,16 @@ public class Alloy {
 
     boolean justFunction = false;
     boolean justInverseFunction = false;
-    if (to == null) {// just x - means no field but to itself
-                     // i.e., fact {all x: B | bijectionFiltered[sources, x.transferB1B2, x.b1]} in
-                     // 4.1.4 Transfer Parameter2 -Parameter Behavior.als
+    if (to == null) { // just x - means no field but to itself
+      // i.e., fact {all x: B | bijectionFiltered[sources, x.transferB1B2, x.b1]} in
+      // 4.1.4 Transfer Parameter2 -Parameter Behavior.als
       justFunction = true;
       toExpr = s;
-    } else
-      toExpr = addExprVarToExpr(s, to);
-    if (from == null) {// just x - means no field but to itself
+    } else toExpr = addExprVarToExpr(s, to);
+    if (from == null) { // just x - means no field but to itself
       justInverseFunction = true;
       fromExpr = s;
-    } else
-      fromExpr = addExprVarToExpr(s, from);
+    } else fromExpr = addExprVarToExpr(s, from);
 
     Expr funcCall = func.call();
 
@@ -443,14 +431,14 @@ public class Alloy {
 
   /**
    * Example: all s: FoodService | bijectionFiltered[happensBefore, s.order, s.serve]
-   * 
+   *
    * @param ownerSig = FoodService
    * @param var = s
    * @param from = order
    * @param to = serve
    */
-  public void createBijectionFilteredHappensBeforeAndAddToOverallFact(ExprVar var, Sig ownerSig,
-      Expr from, Expr to) {
+  public void createBijectionFilteredHappensBeforeAndAddToOverallFact(
+      ExprVar var, Sig ownerSig, Expr from, Expr to) {
 
     Expr bijectionFilteredExpr =
         bijectionFiltered.call(happensBefore.call(), var.join(from), var.join(to));
@@ -461,7 +449,7 @@ public class Alloy {
 
   /**
    * Returns nonZeroDurationOnly and suppressTransfers and suppressIO
-   * 
+   *
    * @return nonZeroDurationOnly and suppressTransfers and suppressIO
    */
   public Expr getCommonCmdExprs() {
@@ -484,7 +472,8 @@ public class Alloy {
     Func suppressIOFunction = new Func(null, "suppressIO", null, null, suppressIOExpressionBody);
     Expr suppressIOExpression = suppressIOFunction.call();
 
-    return nonZeroDurationOnlyFunctionExpression.and(suppressTransfersExpression)
+    return nonZeroDurationOnlyFunctionExpression
+        .and(suppressTransfersExpression)
         .and(suppressIOExpression);
   }
 
@@ -500,8 +489,8 @@ public class Alloy {
         s.join(field).cardinality().equal(ExprConstant.makeNUMBER(num)).forAll(decl));
   }
 
-  public void addCardinalityGreaterThanEqualConstraintToField(Sig ownerSig, Sig.Field field,
-      int num) {
+  public void addCardinalityGreaterThanEqualConstraintToField(
+      Sig ownerSig, Sig.Field field, int num) {
     ExprVar s = ExprVar.make(null, "x", ownerSig.type());
     List<ExprHasName> names = new ArrayList<>(List.of(s));
     Decl decl = new Decl(null, null, null, names, ownerSig.oneOf());
@@ -609,8 +598,7 @@ public class Alloy {
     Decl decl = new Decl(null, null, null, List.of(s), sig.oneOf());
 
     List<String> sortedFieldLabel = new ArrayList<>();
-    for (String stepField : stepFields)
-      sortedFieldLabel.add(stepField);
+    for (String stepField : stepFields) sortedFieldLabel.add(stepField);
     Collections.sort(sortedFieldLabel);
 
     Expr expr = null;
@@ -627,8 +615,6 @@ public class Alloy {
     }
   }
 
-
-
   public Command createCommand(String label, int __overall) {
     Pos _pos = null;
     String _label = label;
@@ -644,8 +630,20 @@ public class Alloy {
 
     // ========== Define command ==========
 
-    Command command = new Command(_pos, _nameExpr, _label, _check, _overall, _bitwidth, _maxseq,
-        _expects, _scope, _additionalExactSig, _formula, _parent);
+    Command command =
+        new Command(
+            _pos,
+            _nameExpr,
+            _label,
+            _check,
+            _overall,
+            _bitwidth,
+            _maxseq,
+            _expects,
+            _scope,
+            _additionalExactSig,
+            _formula,
+            _parent);
     return command;
   }
 
@@ -656,12 +654,12 @@ public class Alloy {
    * if (fieldsByFieldType.containsKey(type)) { fields = fieldsByFieldType.get(type); } else {
    * fields = new ArrayList<>(); fieldsByFieldType.put(type, fields); } fields.add(field); } return
    * fieldsByFieldType;
-   * 
+   *
    * }
-   * 
-   * 
+   *
+   *
    * public void addConstraint(Sig ownerSig, Map<Field, Sig> fieldByFieldType) {
-   * 
+   *
    * Map<Sig, List<Field>> fieldsByFieldType = toFieldsByFieldType(fieldByFieldType); Expr
    * duringExampleExpressions = null; for (Sig type : fieldsByFieldType.keySet()) { String
    * labelPrefix = ""; Expr body = null; for (Field field : fieldsByFieldType.get(type)) { if
@@ -676,17 +674,17 @@ public class Alloy {
    * null) { Func instancesDuringExamplePredicate = new Func(null, "instancesDuringExample", new
    * ArrayList<>(), null, duringExampleExpressions); Expr instancesDuringExampleExpression =
    * instancesDuringExamplePredicate.call(); addToNameExpr(instancesDuringExampleExpression); }
-   * 
+   *
    * }
-   * 
+   *
    * public void addOnlyConstraint(Sig sig) { Func onlySimpleSequencePredicate = new Func(null,
    * "only" + sig.label, new ArrayList<>(), null,
    * sig.cardinality().equal(ExprConstant.makeNUMBER(1))); Expr onlySimpleSequenceExpression =
    * onlySimpleSequencePredicate.call(); addToNameExpr(onlySimpleSequenceExpression); }
-   * 
+   *
    * public void addConstraintzz(Sig ownerSig, Map<String, Field> fieldByName, Map<String, Sig>
    * fieldTypeByFieldName) {
-   * 
+   *
    * // During Pos pos = null; Expr duringExampleExpressions = null; String label =
    * "pDuringExample"; // p1DuringExample Expr body = null; String commonFieldName = ""; for (String
    * fieldName : fieldByName.keySet()) { commonFieldName = fieldName; Sig.Field field =
@@ -697,20 +695,19 @@ public class Alloy {
    * label, decls, returnDecl, pDuringExampleBody); Expr duringExampleExpression =
    * duringExamplePredicate.call(); duringExampleExpressions = duringExampleExpressions == null ?
    * duringExampleExpression : duringExampleExpressions.and(duringExampleExpression);
-   * 
-   * 
-   * 
+   *
+   *
+   *
    * Func instancesDuringExamplePredicate = new Func(null, "instancesDuringExample", new
    * ArrayList<>(), null, duringExampleExpressions); Expr instancesDuringExampleExpression =
    * instancesDuringExamplePredicate.call();
-   * 
+   *
    * Func onlySimpleSequencePredicate = new Func(null, "only" + ownerSig.label, new ArrayList<>(),
    * null, ownerSig.cardinality().equal(ExprConstant.makeNUMBER(1))); Expr
    * onlySimpleSequenceExpression = onlySimpleSequencePredicate.call();
-   * 
+   *
    * addToNameExpr(instancesDuringExampleExpression); addToNameExpr(onlySimpleSequenceExpression); }
    */
-
 
   /*
    * public Command createRunCommand(String label, int overall) { Pos pos = null; boolean check =
@@ -721,7 +718,4 @@ public class Alloy {
    * additionalExactSig, formula, parent); }
    */
 
-
 }
-
-
