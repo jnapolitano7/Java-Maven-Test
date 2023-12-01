@@ -18,6 +18,11 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Authenticate on Github
+        run: echo "//maven.pkg.github.com/ontological-behavior-modeling/omgutil:username=${{github.actor}}" >> settings.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           
       - name: Release
         run: |
