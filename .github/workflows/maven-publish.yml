@@ -22,10 +22,10 @@ jobs:
       - name: Authenticate on Github
         run: echo "//maven.pkg.github.com/ontological-behavior-modeling/omgutil:username=${{github.actor}}" >> settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN}}
           
       - name: Release
         run: |
           mvn -B release:clean release:prepare release:perform
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN }}
