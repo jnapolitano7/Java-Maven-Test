@@ -30,7 +30,7 @@ jobs:
 
       - name: Authenticate
         run: |
-          echo "//registry.pkg.${{ github.repository }}.owner=${{ github.actor}}" ~/.m2/credentials.properties
+          echo "//registry.pkg.jnapolitano7/Java-Maven-Test/owner=jnapolitano7" ~/.m2/credentials.properties
         env: 
           TOKEN: ${{ secrets.JAVA_TOKEN }}
 
