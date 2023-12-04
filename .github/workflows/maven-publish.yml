@@ -12,16 +12,16 @@ jobs:
     steps:
       - name: List Files
         run: ls -R
-
-      - name: Copy settings.xml
-        run: cp .github/Maven/settings.xml $HOME/.m2/settings.xml
-        working-directory: ${{ github.workspace }}
         
       - name: Print Dir
         run: pwd
 
       - name: List Out
         run: echo "FIles in the working directory:" && ls -R
+
+      - name: Copy settings.xml
+        run: cp .github/Maven/settings.xml $HOME/.m2/settings.xml
+        working-directory: ${{ github.workspace }}
         
       - name: Set up JDK
         uses: actions/setup-java@v3
