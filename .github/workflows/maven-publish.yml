@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Config Env
+        run: git --version
+        
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
@@ -23,7 +26,7 @@ jobs:
         run: |
           git config --global user.email "joseph.napolitano@gtri.gatech.edu"
           git config --global user.name "jnapolitano7"
-          git remote set-url origin https://$GITHUB_ACTOR;$JAVA_TOKEN@github.com/jnapolitano7/Java-Maven-Test.git
+          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.JAVA_TOKEN }}@github.com/jnapolitano7/Java-Maven-Test.git
           
       - name: Release
         run: |
