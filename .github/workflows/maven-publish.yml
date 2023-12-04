@@ -11,8 +11,8 @@ jobs:
 
     steps:
       - name: List Maveb
-        run: ls -R .github/Maven
         working-directory: ${{ github.workspace }}
+        run: ls -R .github/Maven
     
       - name: Copy settings.xml
         working-directory: ${{ github.workspace }}
