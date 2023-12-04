@@ -28,6 +28,12 @@ jobs:
           git config --global user.name "jnapolitano7"
           git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.JAVA_TOKEN }}@github.com/jnapolitano7/Java-Maven-Test.git
 
+      - name: Authenticate
+       run: |
+         echo "//registry.pkg.${{ github.repository }}.owner=${{ github.actor}}" ~/.m2/credentials.properties
+       env: 
+         TOKEN: ${{ secrets.JAVA_TOKEN }}
+
       - name: Package
         run: |
           mvn clean package
