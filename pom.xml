@@ -17,7 +17,7 @@
     <repository>
       <id>Java-Maven-Test</id>
       <name>GitHub Packages</name>
-      <url>https://mvn.pkg.github.com/jnapolitano7/Java-Maven-Test</url>
+      <url>https://github.com/jnapolitano7/Java-Maven-Test</url>
     </repository>
   </distributionManagement>
 
@@ -113,7 +113,7 @@
       </snapshots>
       <id>omgutil</id>
       <name>GitHub Packages for omgutil</name>
-      <url>https://maven.pkg.github.com/ontological-behavior-modeling/omgutil</url>
+      <url>https://github.com/ontological-behavior-modeling/omgutil</url>
       <layout>default</layout>
     </repository>
   </repositories>
