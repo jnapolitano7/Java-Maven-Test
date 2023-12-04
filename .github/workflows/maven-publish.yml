@@ -21,7 +21,7 @@ jobs:
 
       - name: Configure Git
         run: |
-          git config --global user.email "joseph.napolitano@gtri.gatech.edu:
+          git config --global user.email "joseph.napolitano@gtri.gatech.edu"
           git config --global user.name "jnapolitano7"
           
       - name: Release
