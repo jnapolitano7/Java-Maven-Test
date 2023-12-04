@@ -18,6 +18,7 @@ jobs:
 
       - name: List Out
         run: echo "FIles in the working directory:" && ls -R
+        working-directory: ${{ github.workspace }}
 
       - name: Copy settings.xml
         run: cp .github/Maven/settings.xml $HOME/.m2/settings.xml
