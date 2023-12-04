@@ -9,14 +9,12 @@
   <scm>
     <connection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</connection>
     <developerConnection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</developerConnection>
-    <tag>HEAD</tag>
     <url>https://github.com/jnapolitano7/Java-Maven-Test</url>
   </scm>
 
   <distributionManagement>
     <repository>
-      <id>Java-Maven-Test</id>
-      <name>GitHub Packages</name>
+	  <id>github</id>
       <url>https://maven.pkg.github.com/jnapolitano7/Java-Maven-Test</url>
     </repository>
   </distributionManagement>
