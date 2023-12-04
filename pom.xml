@@ -68,11 +68,6 @@
       <artifactId>spotless-maven-plugin</artifactId>
       <version>${spotless.version}</version>
     </dependency>
-    <dependency>
-      <groupId>edu.umd</groupId>
-      <artifactId>omgutil3</artifactId>
-      <version>${omgutil.version}</version>
-    </dependency>
     <!-- for graph -->
     <dependency>
       <groupId>org.graphstream</groupId>
