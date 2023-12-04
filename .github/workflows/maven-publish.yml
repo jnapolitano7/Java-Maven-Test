@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: List Maveb
+        run: ls -R .github/Maven
+        working-directory: ${{ github.workspace }}
+    
       - name: Copy settings.xml
         working-directory: ${{ github.workspace }}
         run: cp .github/Maven/settings.xml $HOME/.m2/settings.xml
