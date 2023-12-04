@@ -27,6 +27,10 @@ jobs:
           git config --global user.email "joseph.napolitano@gtri.gatech.edu"
           git config --global user.name "jnapolitano7"
           git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.JAVA_TOKEN }}@github.com/jnapolitano7/Java-Maven-Test.git
+
+      - name: Package
+        run: |
+          mvn clean package
           
       - name: Release
         run: |
