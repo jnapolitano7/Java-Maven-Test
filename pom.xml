@@ -4,7 +4,7 @@
 
   <groupId>edu.gatech.gtri.obm</groupId>
   <artifactId>Java-Maven-Test</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5-SNAPSHOT</version>
 
   <scm>
     <connection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</connection>
@@ -125,7 +125,6 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>3.0.1</version>
         <configuration>
-          <tagNameFormat>@{project.version}</tagNameFormat>
           <checkModificationExcludes>
             <checkModificationExclude>settings.xml</checkModificationExclude>
           </checkModificationExcludes>
