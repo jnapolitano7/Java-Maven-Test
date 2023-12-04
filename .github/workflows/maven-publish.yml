@@ -20,6 +20,10 @@ jobs:
         run: echo "FIles in the working directory:" && ls -R
         working-directory: ${{ github.workspace }}
 
+      - name: Debug
+        run: ls -R && echo "Current directory: $PWD"
+        working-directory: {{ github.workspace }}
+
       - name: Copy settings.xml
         run: cp .github/Maven/settings.xml $HOME/.m2/settings.xml
         working-directory: ${{ github.workspace }}
