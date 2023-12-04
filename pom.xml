@@ -17,7 +17,7 @@
     <repository>
       <id>Java-Maven-Test</id>
       <name>GitHub Packages</name>
-      <url>https://github.com/jnapolitano7/Java-Maven-Test</url>
+      <url>https://maven.pkg.github.com/jnapolitano7/Java-Maven-Test</url>
     </repository>
   </distributionManagement>
 
@@ -25,33 +25,10 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <pomsort.version>3.2.1</pomsort.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spotless.version>2.36.0</spotless.version>
-    <omgutil.version>1.0.1</omgutil.version>
-    <commons-io.version>2.15.0</commons-io.version>
-    <gs-ui-swing.version>2.0</gs-ui-swing.version>
-    <gs-core.version>2.0</gs-core.version>
     <lombok.version>1.18.26</lombok.version>
-    <junit-jupiter-engine.version>5.9.2</junit-jupiter-engine.version>
-    <junit-jupiter-params.version>5.9.2</junit-jupiter-params.version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>${junit-jupiter-engine.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <version>${junit-jupiter-params.version}</version>
-      <scope>test</scope>
-    </dependency>
-
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -63,60 +40,7 @@
       <artifactId>sortpom-maven-plugin</artifactId>
       <version>${pomsort.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.diffplug.spotless</groupId>
-      <artifactId>spotless-maven-plugin</artifactId>
-      <version>${spotless.version}</version>
-    </dependency>
-    <!-- for graph -->
-    <dependency>
-      <groupId>org.graphstream</groupId>
-      <artifactId>gs-core</artifactId>
-      <version>${gs-core.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.graphstream</groupId>
-      <artifactId>gs-ui-swing</artifactId>
-      <version>${gs-ui-swing.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commons-io.version}</version>
-    </dependency>
   </dependencies>
-
-  <repositories>
-    <!--<repository>  The jitpack 'repo' is an on-the-fly build service for Github (and other code repos). 
-	    <id>jitpack.io</id>
-	    <url>https://jitpack.io</url> 
-	</repository>-->
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-        <checksumPolicy>ignore</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>oss-sonatype</id>
-      <name>oss-sonatype</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </repository>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-        <checksumPolicy>ignore</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <id>omgutil</id>
-      <name>GitHub Packages for omgutil</name>
-      <url>https://github.com/ontological-behavior-modeling/omgutil</url>
-      <layout>default</layout>
-    </repository>
-  </repositories>
 
   <build>
     <plugins>
@@ -166,39 +90,6 @@
           <execution>
             <goals>
               <goal>sort</goal>
-            </goals>
-            <phase>verify</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <!-- see for documentation and config: https://github.com/diffplug/spotless/tree/main/plugin-maven#google-java-format -->
-        <groupId>com.diffplug.spotless</groupId>
-        <artifactId>spotless-maven-plugin</artifactId>
-        <version>${spotless.version}</version>
-        <configuration>
-          <java>
-            <!-- These are the defaults, you can override if you want -->
-            <includes>
-              <include>src/main/java/**/*.java</include>
-              <include>src/test/java/**/*.java</include>
-            </includes>
-            <googleJavaFormat>
-              <version>1.8</version>
-              <!-- optional, 1.8 is minimum supported version -->
-              <style>GOOGLE</style>
-              <!-- or AOSP (optional) -->
-              <reflowLongStrings>true</reflowLongStrings>
-              <!-- optional -->
-              <!-- optional: custom group artifact (you probably don't need this) -->
-              <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
-            </googleJavaFormat>
-          </java>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
             </goals>
             <phase>verify</phase>
           </execution>
