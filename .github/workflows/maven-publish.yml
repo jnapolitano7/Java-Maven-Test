@@ -18,30 +18,15 @@ jobs:
 
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: List Maveb
-        working-directory: ${{ github.workspace }}
-        run: ls -R .github/Maven
-    
-      - name: Copy settings.xml
-        working-directory: ${{ github.workspace }}
-        run: cp .github/Maven/settings.xml $HOME/.m2/settings.xml
-
-      - name: Configure Git
+       
+      - name: Release Prepare
         run: |
-          git config --global user.email "joseph.napolitano@gtri.gatech.edu"
-          git config --global user.name "jnapolitano7"
-          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.JAVA_TOKEN }}@github.com/jnapolitano7/Java-Maven-Test.git
+          mvn release:clean release:prepare -B
+        env:
+          GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN }}
 
-      - name: Authenticate
+      - name: Release Perform
         run: |
-          echo "//registry.pkg.jnapolitano7/Java-Maven-Test/owner=jnapolitano7" ~/.m2/credentials.properties
-        env: 
-          TOKEN: ${{ secrets.JAVA_TOKEN }}
-
-          
-      - name: Release
-        run: |
-          mvn -B release:clean release:prepare release:perform
+          mvn release:perform -B
         env:
           GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN }}
