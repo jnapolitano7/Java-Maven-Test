@@ -4,13 +4,13 @@
 
   <groupId>edu.gatech.gtri.obm</groupId>
   <artifactId>java-maven-test</artifactId>
-  <version>1.0.19</version>
+  <version>1.0.20-SNAPSHOT</version>
 
   <scm>
     <connection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</connection>
     <developerConnection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</developerConnection>
     <url>https://github.com/jnapolitano7/Java-Maven-Test</url>
-    <tag>java-maven-test-1.0.19</tag>
+    <tag>java-maven-test-1.0.5</tag>
   </scm>
 
   <distributionManagement>
