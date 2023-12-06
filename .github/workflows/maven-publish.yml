@@ -21,15 +21,11 @@ jobs:
         
       - name: Configure Git
         run: |
-          git config --global user.email "joseph.napolitano@gtri.gatech.edu"
-          git config --global user.name "jnapolitano7"
-          git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.JAVA_TOKEN }}@github.com/jnapolitano7/Java-Maven-Test.git
+          git config --global user.email "actions@github.com"
+          git config --global user.name "Github Actions"
 
       - name: Copy settings.xml
         run: cp ./.github/Maven/settings.xml $HOME/.m2/settings.xml
-
-      - name: Display settings
-        run: cat $HOME/.m2/settings.xml
        
       - name: Release Prepare
         run: |
