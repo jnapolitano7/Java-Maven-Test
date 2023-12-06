@@ -41,15 +41,15 @@ jobs:
 
       - name: Read Current Maven Version
         id: mvn_version
-        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q DforceStdout)"
+        run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
 
       - name: Create new Github Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           files: target/*.jar
-          tag_name: ${{ steps.mvn_version.outputs.version }}
-          release_name: Release ${{ steps.mvn_version.outputs.version }}
+          tag_name: ${{ steps.mvn_version.outputs.tag }}
+          release_name: Release ${{ steps.mvn_version.outputs.tag }}
           body: |
-            Release ${{ steps.mvn_release.output.version }}
+            Release ${{ steps.mvn_release.output.tag }}
         
