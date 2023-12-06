@@ -25,8 +25,8 @@ jobs:
           git config --global user.name "jnapolitano7"
           git remote set-url origin https://$GITHUB_ACTOR:${{ secrets.JAVA_TOKEN }}@github.com/jnapolitano7/Java-Maven-Test.git
 
-      - name: Authenticate with Github
-        run: echo "//npm.pkg.github.com?:_authToken=\${{ secrets.JAVA_TOKEN }}" > ~/.npmrc
+      - name: Copy settings.xml
+        run: cp ./.github/Maven/settings.xml $HOME/.m2/settings.xml
        
       - name: Release Prepare
         run: |
