@@ -27,14 +27,29 @@ jobs:
       - name: Copy settings.xml
         run: cp ./.github/Maven/settings.xml $HOME/.m2/settings.xml
        
-      - name: Release Prepare
+      - name: Prepare Maven Release
         run: |
           mvn release:clean release:prepare -B
         env:
           GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN }}
 
-      - name: Release Perform
+      - name: Perform Maven Release
         run: |
           mvn release:perform -B
         env:
           GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN }}
+
+      - name: Read Current Maven Version
+        id: mvn_version
+        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q DforceStdout)"
+
+      - name: Create new Github Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: target/*.jar
+          tag_name: ${{ steps.mvn_version.outputs.version }}
+          release_name: Release ${{ steps.mvn_version.outputs.version }}
+          body: |
+            Release ${{ steps.mvn_release.output.version }}
+        
