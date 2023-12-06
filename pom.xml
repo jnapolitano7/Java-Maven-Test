@@ -4,13 +4,12 @@
 
   <groupId>edu.gatech.gtri.obm</groupId>
   <artifactId>java-maven-test</artifactId>
-  <version>1.0.21-SNAPSHOT</version>
+  <version>1.0.17-SNAPSHOT</version>
 
   <scm>
     <connection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</connection>
     <developerConnection>scm:git:https://github.com/jnapolitano7/Java-Maven-Test.git</developerConnection>
     <url>https://github.com/jnapolitano7/Java-Maven-Test</url>
-    <tag>java-maven-test-1.0.5</tag>
   </scm>
 
   <distributionManagement>
@@ -24,6 +23,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <lombok.version>1.18.26</lombok.version>
+    <omgutil.version>1.0.1</omgutil.version>
   </properties>
 
   <dependencies>
@@ -33,7 +33,28 @@
       <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>edu.umd</groupId>
+      <artifactId>omgutil3</artifactId>
+      <version>${omgutil.version}</version>
+    </dependency>
   </dependencies>
+  
+  <repositories>
+	<repository>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>ignore</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <id>omgutil</id>
+      <name>GitHub Packages for omgutil</name>
+      <url>https://maven.pkg.github.com/ontological-behavior-modeling/omgutil</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
