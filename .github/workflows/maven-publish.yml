@@ -27,6 +27,9 @@ jobs:
 
       - name: Copy settings.xml
         run: cp ./.github/Maven/settings.xml $HOME/.m2/settings.xml
+
+      - name: Display settings
+        run: cat $HOME/.m2/settings.xml
        
       - name: Release Prepare
         run: |
