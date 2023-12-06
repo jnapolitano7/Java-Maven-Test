@@ -58,11 +58,15 @@
   </repositories>
 
   <build>
+	<finalName>java-maven-test</finalName>
     <plugins>
+	  <!-- This step skips creating a jar -->
 	  <plugin>
-		<groupId>org.codehaud.mojo</groupId>
-		<artifactId>versions-maven-plugin</artifactId>
-		<version>2.16.2</version>
+		  <groupId>org.apache.maven.plugins</groupId>
+		  <artifactId>maven-jar-plugin</artifactId>
+		  <configuration>
+			  <skip>true</skip>
+		  </configuration>
 	  </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -76,6 +80,7 @@
           </checkModificationExcludes>
         </configuration>
       </plugin>
+      <!-- This step creates a jar with depenedencies -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
@@ -91,11 +96,9 @@
         <executions>
           <execution>
             <id>make-assembly</id>
-            <!-- bind to the packaging phase -->
             <goals>
               <goal>single</goal>
             </goals>
-            <!-- this is used for inheritance merges -->
             <phase>package</phase>
           </execution>
         </executions>
