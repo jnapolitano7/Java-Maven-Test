@@ -59,6 +59,11 @@
 
   <build>
     <plugins>
+	  <plugin>
+		<groupId>org.codehaud.mojo</groupId>
+		<artifactId>versions-maven-plugin</artifactId>
+		<version>2.16.2</version>
+	  </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
