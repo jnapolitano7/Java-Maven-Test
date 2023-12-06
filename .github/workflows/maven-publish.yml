@@ -47,7 +47,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/*.jar
+          files: target/*-with-dependencies.jar
           tag_name: ${{ steps.mvn_version.outputs.tag }}
           release_name: Release ${{ steps.mvn_version.outputs.tag }}
           body: |
