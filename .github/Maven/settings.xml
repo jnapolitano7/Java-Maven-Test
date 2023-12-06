@@ -30,7 +30,7 @@
     <server>
       <id>github</id>
       <username>jnapolitano7</username>
-      <password>${{ secrets.JAVA_TOKEN }}</password>
+      <password>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</password>
     </server>
   </servers>
 </settings>
