@@ -49,7 +49,6 @@ jobs:
         with:
           files: target/*-with-dependencies.jar
           tag_name: ${{ steps.mvn_version.outputs.tag }}
-          release_name: Release ${{ steps.mvn_version.outputs.tag }}
           body: |
             Release ${{ steps.mvn_release.output.tag }}
         
