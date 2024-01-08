@@ -63,7 +63,9 @@
     <dependency>
       <groupId>org.alloytools</groupId>
       <artifactId>org.alloytools.alloy.application</artifactId>
-      <version>${alloy.version}</version>
+      <version>5.1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/org.alloytools.alloy.dist.jar</systemPath>
     </dependency>
     <!-- see for documentation and configuration information: https://github.com/Ekryd/sortpom -->
     <dependency>
