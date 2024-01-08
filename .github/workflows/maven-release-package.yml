@@ -32,7 +32,7 @@ jobs:
         run: |
           mvn release:clean release:prepare -B -DdryRun
         env:
-          GITHUB_TOKEN: ${{ secrets.JAVA_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Perform Maven Release
         run: |
