@@ -67,7 +67,7 @@
       <systemPath>${project.basedir}/lib/org.alloytools.alloy.dist.jar</systemPath>
     </dependency>
     <!-- see for documentation and configuration information: https://github.com/Ekryd/sortpom -->
-
+<!--
     <dependency>
       <groupId>com.github.ekryd.sortpom</groupId>
       <artifactId>sortpom-maven-plugin</artifactId>
@@ -98,6 +98,7 @@
       <artifactId>commons-io</artifactId>
       <version>${commons-io.version}</version>
     </dependency>
+    -->
   </dependencies>
   
   <reporting>
